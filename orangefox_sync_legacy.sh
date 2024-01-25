@@ -287,9 +287,9 @@ clone_fox_recovery() {
 local URL="";
 local BRANCH=$FOX_BRANCH;
    if [ "$USE_SSH" = "0" ]; then
-      URL="https://gitlab.com/OrangeFox/bootable/Recovery.git";
+      URL="https://github.com/LegacyOrangeFox/OrangeFox_bootable_Recovery.git";
    else
-      URL="git@gitlab.com:OrangeFox/bootable/Recovery.git";
+      URL="git@github.com:LegacyOrangeFox/OrangeFox_bootable_Recovery.git";
    fi
 
    mkdir -p $MANIFEST_DIR/bootable;
@@ -309,25 +309,9 @@ local BRANCH=$FOX_BRANCH;
    git clone --recurse-submodules $URL -b $BRANCH recovery;
    [ "$?" = "0" ] && echo "-- The OrangeFox sources have been cloned successfully" || echo "-- Failed to clone the OrangeFox sources!";
 
-   # check that the themes are correctly downloaded
-   if [ ! -f recovery/gui/theme/portrait_hdpi/ui.xml ]; then
-      	echo "-- Themes not found! Trying again to pull the themes ...";
-   	if [ "$USE_SSH" = "0" ]; then
-      	   URL="https://gitlab.com/OrangeFox/misc/theme.git";
-   	else
-      	   URL="git@gitlab.com:OrangeFox/misc/theme.git";
-   	fi
-      	[ -d recovery/gui/theme ] && rm -rf recovery/gui/theme;
-      	git clone $URL recovery/gui/theme;
-      	[ "$?" = "0" ] && echo "-- The themes have been cloned successfully" || echo "-- Failed to clone the themes!";
-   fi
-
-   # ensure that the submodules are updated
-   if [ -d $MANIFEST_DIR/bootable/recovery/gui/theme ]; then
-      cd $MANIFEST_DIR/bootable/recovery/;
-      git submodule foreach --recursive git pull origin master;
-      cd $MANIFEST_DIR/bootable/;
-   fi
+   echo "-----------------------------------------------------------------------------------------------------------------------------------------"
+   echo "--- PULL THEMES USING \"git clone --depth=1 https://gitlab.com/OrangeFox/misc/theme.git bootable/recovery/gui/theme\" IN SOURCE FOLDER. ---"
+   echo "-----------------------------------------------------------------------------------------------------------------------------------------"
 
    # cleanup /tmp/recovery/
    echo  "-- Cleaning up the TWRP recovery sources from /tmp";
